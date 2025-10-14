@@ -1,0 +1,28 @@
+services:
+  logstash:
+    build: .
+    container_name: logstash
+    env_file:
+      - .env
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+      - ./logstash_data:/var/lib/logstash
+      - ./drivers/mysql-connector-j-8.0.33.jar:/usr/share/logstash/logstash-core/lib/jars/mysql-connector-java-8.0.33.jar
+    environment:
+      - LS_JAVA_OPTS=-Xmx1g -Xms1g
+      - LOGSTASH_JDBC_VALIDATE_CONNECTION=true
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+    networks:
+      - app_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9600"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  app_network:
+    driver: bridge
