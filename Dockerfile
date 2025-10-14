@@ -3,7 +3,7 @@ FROM docker.elastic.co/logstash/logstash:8.14.3
 USER root
 
 # Install the JDBC output plugin
-RUN bin/logstash-plugin install logstash-output-jdbc
+#RUN bin/logstash-plugin install logstash-output-jdbc
 
 # Copy MySQL connector JAR
 COPY drivers/mysql-connector-j-8.0.33.jar /usr/share/logstash/logstash-core/lib/jars/
